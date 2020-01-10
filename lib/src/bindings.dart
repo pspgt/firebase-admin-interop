@@ -48,7 +48,7 @@ abstract class FirebaseAdmin {
   external FirestoreService get firestore;
 
   external Credentials get credential;
-  
+
   /// Gets the [Messaging] service for the default app or a given [app].
   external Messaging messaging([App app]);
 }
@@ -159,7 +159,7 @@ abstract class App {
 
   /// Gets the [Firestore] client for this app.
   external Firestore firestore();
-  
+
   /// Gets the [Messaging] service for this app.
   external Messaging messaging();
 }
@@ -552,107 +552,60 @@ abstract class Messaging {
   external App get app;
 
   /// Sends the given message via FCM.
-  /// 
-  /// Returns Promise<string> fulfilled with a unique message ID string after the 
+  ///
+  /// Returns Promise<string> fulfilled with a unique message ID string after the
   /// message has been successfully handed off to the FCM service for delivery
-  external Promise send(Message message, [bool dryRun]);
+  external Promise send(FcmMessage message, [bool dryRun]);
 
   /// Sends all the messages in the given array via Firebase Cloud Messaging.
-  /// 
+  ///
   /// Returns Promise<BatchResponse> fulfilled with an object representing the result of the send operation.
-  external Promise sendAll(List<Message> messages, [bool dryRun]);
+  external Promise sendAll(List<FcmMessage> messages, [bool dryRun]);
 
   /// Sends the given multicast message to all the FCM registration tokens specified in it.
-  /// 
+  ///
   /// Returns Promise<BatchResponse> fulfilled with an object representing the result of the send operation.
   external Promise sendMulticast(MulticastMessage message, [bool dryRun]);
 
   /// Sends an FCM message to a condition.
-  /// 
+  ///
   /// Returns Promise<MessagingConditionResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToCondition(String condition, MessagingPayload payload, [MessagingOptions options]);
-  
+  external Promise sendToCondition(String condition, MessagingPayload payload,
+      [MessagingOptions options]);
+
   /// Sends an FCM message to a single device corresponding to the provided registration token.
-  /// 
+  ///
   /// Returns Promise<MessagingDevicesResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToDevice(String registrationToken, MessagingPayload payload, [MessagingOptions options]);
+  external Promise sendToDevice(
+      String registrationToken, MessagingPayload payload,
+      [MessagingOptions options]);
 
   /// Sends an FCM message to a device group corresponding to the provided notification key.
-  /// 
+  ///
   /// Returns Promise<MessagingDevicesResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToDeviceGroup(String notificationKey, MessagingPayload payload, [MessagingOptions options]);
+  external Promise sendToDeviceGroup(
+      String notificationKey, MessagingPayload payload,
+      [MessagingOptions options]);
 
   /// Sends an FCM message to a topic.
-  /// 
+  ///
   /// Returns Promise<MessagingTopicResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToTopic(String topic, MessagingPayload payload, [MessagingOptions options]);
+  external Promise sendToTopic(String topic, MessagingPayload payload,
+      [MessagingOptions options]);
 
   /// Subscribes a device to an FCM topic.
-  /// 
+  ///
   /// Returns Promise<MessagingTopicManagementResponse> fulfilled with the server's response after the device has been subscribed to the topic.
   external Promise subscribeToTopic(String registrationTokens, String topic);
 
   /// Unsubscribes a device from an FCM topic.
-  /// 
+  ///
   /// Returns Promise<MessagingTopicManagementResponse> fulfilled with the server's response after the device has been subscribed to the topic.
-  external Promise unsubscribeFromTopic(String registrationTokens, String topic);
+  external Promise unsubscribeFromTopic(
+      String registrationTokens, String topic);
 }
 
 // admin.messaging ================================================================
-
-/// The Firebase Messaging service interface.
-@JS()
-@anonymous
-abstract class Messaging {
-  /// The app associated with this Messaging service instance.
-  external App get app;
-
-  /// Sends the given message via FCM.
-  /// 
-  /// Returns Promise<string> fulfilled with a unique message ID string after the 
-  /// message has been successfully handed off to the FCM service for delivery
-  external Promise send(Message message, [bool dryRun]);
-
-  /// Sends all the messages in the given array via Firebase Cloud Messaging.
-  /// 
-  /// Returns Promise<BatchResponse> fulfilled with an object representing the result of the send operation.
-  external Promise sendAll(List<Message> messages, [bool dryRun]);
-
-  /// Sends the given multicast message to all the FCM registration tokens specified in it.
-  /// 
-  /// Returns Promise<BatchResponse> fulfilled with an object representing the result of the send operation.
-  external Promise sendMulticast(MulticastMessage message, [bool dryRun]);
-
-  /// Sends an FCM message to a condition.
-  /// 
-  /// Returns Promise<MessagingConditionResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToCondition(String condition, MessagingPayload payload, [MessagingOptions options]);
-  
-  /// Sends an FCM message to a single device corresponding to the provided registration token.
-  /// 
-  /// Returns Promise<MessagingDevicesResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToDevice(String registrationToken, MessagingPayload payload, [MessagingOptions options]);
-
-  /// Sends an FCM message to a device group corresponding to the provided notification key.
-  /// 
-  /// Returns Promise<MessagingDevicesResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToDeviceGroup(String notificationKey, MessagingPayload payload, [MessagingOptions options]);
-
-  /// Sends an FCM message to a topic.
-  /// 
-  /// Returns Promise<MessagingTopicResponse> fulfilled with the server's response after the message has been sent.
-  external Promise sendToTopic(String topic, MessagingPayload payload, [MessagingOptions options]);
-
-  /// Subscribes a device to an FCM topic.
-  /// 
-  /// Returns Promise<MessagingTopicManagementResponse> fulfilled with the server's response after the device has been subscribed to the topic.
-  external Promise subscribeToTopic(String registrationTokens, String topic);
-
-  /// Unsubscribes a device from an FCM topic.
-  /// 
-  /// Returns Promise<MessagingTopicManagementResponse> fulfilled with the server's response after the device has been subscribed to the topic.
-  external Promise unsubscribeFromTopic(String registrationTokens, String topic);
-}
 
 @JS()
 @anonymous
@@ -660,10 +613,10 @@ abstract class FcmMessage {
   external String get data;
   external Notification get notification;
   external String get token;
-  
+
   external factory FcmMessage({
-    String data, 
-    Notification notification, 
+    String data,
+    Notification notification,
     String token,
   });
 }
@@ -677,10 +630,11 @@ abstract class TopicMessage {
   external String get key;
   external FcmOptions get fcmOptions;
   external Notification get notification;
+
   /// Required
   external String get topic;
   external WebpushConfig get webpush;
-  
+
   external factory TopicMessage({
     AndroidConfig android,
     ApnsConfig apns,
@@ -702,10 +656,11 @@ abstract class TokenMessage {
   external String get key;
   external FcmOptions get fcmOptions;
   external Notification get notification;
+
   /// Required
   external String get token;
   external WebpushConfig get webpush;
-  
+
   external factory TokenMessage({
     AndroidConfig android,
     ApnsConfig apns,
@@ -723,6 +678,7 @@ abstract class TokenMessage {
 abstract class ConditionMessage {
   external AndroidConfig get android;
   external ApnsConfig get apns;
+
   /// Required
   external String get condition;
   external dynamic get data;
@@ -730,7 +686,7 @@ abstract class ConditionMessage {
   external FcmOptions get fcmOptions;
   external Notification get notification;
   external WebpushConfig get webpush;
-  
+
   external factory ConditionMessage({
     AndroidConfig android,
     ApnsConfig apns,
@@ -752,10 +708,11 @@ abstract class MulticastMessage {
   external String get key;
   external FcmOptions get fcmOptions;
   external Notification get notification;
+
   /// Required
   external List<String> get tokens;
   external WebpushConfig get webpush;
-  
+
   external factory MulticastMessage({
     AndroidConfig android,
     ApnsConfig apns,
@@ -780,7 +737,7 @@ abstract class Notification {
 
   /// The title of the notification.
   external String get title;
-  
+
   external factory Notification({
     String body,
     String imageUrl,
@@ -836,8 +793,8 @@ abstract class WebpushNotification {
 
   /// A vibration pattern for the device's vibration hardware to emit when the notification fires.
   external num get vibrate;
-  
-  external factory WebpushNotification ({
+
+  external factory WebpushNotification({
     List<dynamic> actions,
     String badge,
     String body,
@@ -871,7 +828,7 @@ abstract class WebpushConfig {
 
   /// A WebPush notification payload to be included in the message.
   external WebpushNotification get notification;
-  
+
   external factory WebpushConfig({
     dynamic data,
     FcmOptions fcmOptions,
@@ -886,7 +843,7 @@ abstract class WebpushConfig {
 abstract class WebpushFcmOptions {
   /// The link to open when the user clicks on the notification. For all URL values, HTTPS is required.
   external String get link;
-  
+
   external factory WebpushFcmOptions({
     String link,
   });
@@ -898,7 +855,7 @@ abstract class WebpushFcmOptions {
 abstract class FcmOptions {
   /// The label associated with the message's analytics data.
   external String get analyticsLabel;
-  
+
   external factory FcmOptions({
     String analyticsLabel,
   });
@@ -924,7 +881,7 @@ abstract class MessagingPayload {
 @JS()
 @anonymous
 abstract class DataMessagePayload {
-  /// Keys can be any custom string, except for the following reserved strings: 
+  /// Keys can be any custom string, except for the following reserved strings:
   /// "from" and anything starting with "google."
   external String get key;
   external dynamic get value;
@@ -935,7 +892,7 @@ abstract class DataMessagePayload {
   });
 }
 
-/// Interface representing an FCM legacy API notification message payload. Notification messages let developers send up to 4KB of predefined key-value pairs. 
+/// Interface representing an FCM legacy API notification message payload. Notification messages let developers send up to 4KB of predefined key-value pairs.
 @JS()
 @anonymous
 abstract class NotificationMessagePayload {
@@ -948,16 +905,16 @@ abstract class NotificationMessagePayload {
   /// Body text of the notification.
   external String get body;
 
-  /// Variable string values to be used in place of the format specifiers in body_loc_key to use to localize the body text to 
+  /// Variable string values to be used in place of the format specifiers in body_loc_key to use to localize the body text to
   /// the user's current localization.
-  /// 
+  ///
   /// The value should be a stringified JSON array.
   external String get bodyLocArgs;
 
   /// The key to the body string in the app's string resources to use to localize the body text to the user's current localization.
   external String get bodyLocKey;
 
-  /// Action associated with a user click on the notification. If specified, an activity with a matching Intent Filter is 
+  /// Action associated with a user click on the notification. If specified, an activity with a matching Intent Filter is
   /// launched when a user clicks on the notification.
   external String get clickAction;
 
@@ -976,14 +933,14 @@ abstract class NotificationMessagePayload {
   /// The notification's title.
   external String get title;
 
-  /// Variable string values to be used in place of the format specifiers in title_loc_key to use to localize the 
+  /// Variable string values to be used in place of the format specifiers in title_loc_key to use to localize the
   /// title text to the user's current localization.
   /// The value should be a stringified JSON array.
   external String get titleLocArgs;
 
   /// The key to the title string in the app's string resources to use to localize the title text to the user's current localization.
   external String get titleLocKey;
-  
+
   external factory NotificationMessagePayload({
     List<dynamic> actions,
     String badge,
@@ -1005,19 +962,19 @@ abstract class NotificationMessagePayload {
 @JS()
 @anonymous
 abstract class MessagingOptions {
-  /// String identifying a group of messages (for example, "Updates Available") that can be collapsed, so that only the last message 
+  /// String identifying a group of messages (for example, "Updates Available") that can be collapsed, so that only the last message
   /// gets sent when delivery can be resumed. This is used to avoid sending too many of the same messages when the device comes back online or becomes active.
   external String get collapseKey;
 
-  /// On iOS, use this field to represent content-available in the APNs payload. When a notification or data message is sent and this is set to true, 
+  /// On iOS, use this field to represent content-available in the APNs payload. When a notification or data message is sent and this is set to true,
   /// an inactive client app is awoken. On Android, data messages wake the app by default. On Chrome, this flag is currently not supported.
   external bool get contentAvailable;
 
-  /// Whether or not the message should actually be sent. When set to true, allows developers to test a request without actually sending a message. 
+  /// Whether or not the message should actually be sent. When set to true, allows developers to test a request without actually sending a message.
   /// When set to false, the message will be sent.
   external bool get dryRun;
 
-  /// On iOS, use this field to represent mutable-content in the APNs payload. When a notification is sent and this is set to true, the content of the 
+  /// On iOS, use this field to represent mutable-content in the APNs payload. When a notification is sent and this is set to true, the content of the
   /// notification can be modified before it is displayed, using a Notification Service app extension
   /// On Android and Web, this parameter will be ignored.
   external bool get mutableContent;
@@ -1028,9 +985,9 @@ abstract class MessagingOptions {
   /// The package name of the application which the registration tokens must match in order to receive the message.
   external String get restrictedPackageName;
 
-  /// How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is four weeks, and the default value is also four weeks. 
+  /// How long (in seconds) the message should be kept in FCM storage if the device is offline. The maximum time to live supported is four weeks, and the default value is also four weeks.
   external num get timeToLive;
-  
+
   external factory MessagingOptions({
     String collapseKey,
     bool contentAvailable,
@@ -1046,11 +1003,11 @@ abstract class MessagingOptions {
 @JS()
 @anonymous
 abstract class AndroidConfig {
-  /// Collapse key for the message. Collapse key serves as an identifier for a group of messages that can be collapsed, so that only 
+  /// Collapse key for the message. Collapse key serves as an identifier for a group of messages that can be collapsed, so that only
   /// the last message gets sent when delivery can be resumed. A maximum of four different collapse keys may be active at any given time.
   external String get collapseKey;
 
-  /// A collection of data fields to be included in the message. All values must be strings. When provided, overrides any data fields 
+  /// A collection of data fields to be included in the message. All values must be strings. When provided, overrides any data fields
   /// set on the top-level admin.messaging.Message.
   external dynamic get data;
 
@@ -1068,7 +1025,7 @@ abstract class AndroidConfig {
 
   /// Time-to-live duration of the message in milliseconds.
   external num get ttl;
-  
+
   external factory AndroidConfig({
     String collapseKey,
     dynamic data,
@@ -1086,7 +1043,7 @@ abstract class AndroidConfig {
 abstract class AndroidFcmOptions {
   /// The label associated with the message's analytics data.
   external String get analyticsLabel;
-  
+
   external factory AndroidFcmOptions({
     String analyticsLabel,
   });
@@ -1105,7 +1062,7 @@ abstract class AndroidNotification {
   /// The key to the body string in the app's string resources to use to localize the body text to the user's current localization.
   external String get bodyLocKey;
 
-  /// The Android notification channel ID (new in Android O). 
+  /// The Android notification channel ID (new in Android O).
   external String get channelId;
 
   /// Action associated with a user click on the notification. If specified, an activity with a matching Intent Filter is launched when a user clicks on the notification.
@@ -1135,7 +1092,7 @@ abstract class AndroidNotification {
 
   /// Key of the title string in the app's string resource to use to localize the title text.
   external String get titleLocKey;
-  
+
   external factory AndroidNotification({
     String body,
     List<String> bodyLocArgs,
@@ -1153,7 +1110,7 @@ abstract class AndroidNotification {
   });
 }
 
-/// Represents the APNs-specific options that can be included in an admin.messaging.Message. 
+/// Represents the APNs-specific options that can be included in an admin.messaging.Message.
 @JS()
 @anonymous
 abstract class ApnsConfig {
@@ -1165,7 +1122,7 @@ abstract class ApnsConfig {
 
   /// An APNs payload to be included in the message.
   external ApnsPayload get payload;
-  
+
   external factory ApnsConfig({
     ApnsFcmOptions fcmOptions,
     dynamic headers,
@@ -1182,11 +1139,8 @@ abstract class ApnsFcmOptions {
 
   /// URL of an image to be displayed in the notification.
   external String get imageUrl;
-  
-  external factory ApnsFcmOptions({
-    String analyticsLabel,
-    String imageUrl
-  });
+
+  external factory ApnsFcmOptions({String analyticsLabel, String imageUrl});
 }
 
 /// Represents options for features provided by the FCM SDK for iOS.
@@ -1195,7 +1149,7 @@ abstract class ApnsFcmOptions {
 abstract class ApnsPayload {
   /// The aps dictionary to be included in the message.
   external Aps get aps;
-  
+
   external factory ApnsPayload({
     Aps aps,
   });
@@ -1225,7 +1179,7 @@ abstract class Aps {
 
   /// An app-specific identifier for grouping notifications.
   external String get threadId;
-  
+
   external factory Aps({
     String alert,
     num badge,
@@ -1250,7 +1204,7 @@ abstract class ApsAlert {
   external String get title;
   external List<String> get titleLocArgs;
   external String get titleLocKey;
-  
+
   external factory ApsAlert({
     String actionLocKey,
     String body,
@@ -1273,19 +1227,20 @@ abstract class CriticalSound {
   /// The critical alert flag. Set to true to enable the critical alert.
   external bool get critical;
 
-  /// The name of a sound file in the app's main bundle or in the Library/Sounds folder of the app's container directory. 
+  /// The name of a sound file in the app's main bundle or in the Library/Sounds folder of the app's container directory.
   /// Specify the string "default" to play the system sound.
   external String get name;
 
   /// The volume for the critical alert's sound. Must be a value between 0.0 (silent) and 1.0 (full volume).
   external num get volume;
-  
+
   external factory CriticalSound({
     bool critical,
     String name,
     num volume,
   });
 }
+
 /// Interface representing the server response from the sendAll() and sendMulticast() methods.
 @JS()
 @anonymous
@@ -1298,7 +1253,7 @@ abstract class BatchResponse {
 
   /// The number of messages that were successfully handed off for sending.
   external num get successCount;
-  
+
   external factory BatchResponse({
     num failureCount,
     List<SendResponse> responses,
@@ -1316,10 +1271,10 @@ abstract class SendResponse {
   /// A unique message ID string, if the message was handed off to FCM for delivery.
   external String get messageId;
 
-  /// A boolean indicating if the message was successfully handed off to FCM or not. When true, the 
+  /// A boolean indicating if the message was successfully handed off to FCM or not. When true, the
   /// messageId attribute is guaranteed to be set. When false, the error attribute is guaranteed to be set.
   external bool get success;
-  
+
   external factory SendResponse({
     FirebaseError error,
     String messageId,
@@ -1333,7 +1288,7 @@ abstract class SendResponse {
 abstract class MessagingConditionResponse {
   /// The message ID for a successfully received request which FCM will attempt to deliver to all subscribed devices.
   external num get messageId;
-  
+
   external factory MessagingConditionResponse({
     num messageId,
   });
@@ -1351,7 +1306,7 @@ abstract class MessagingDeviceGroupResponse {
 
   /// The number of messages that could not be processed and resulted in an error.
   external num get successCount;
-  
+
   external factory MessagingDeviceGroupResponse({
     List<String> failedRegistrationTokens,
     num failureCount,
@@ -1363,8 +1318,8 @@ abstract class MessagingDeviceGroupResponse {
 @JS()
 @anonymous
 abstract class MessagingDeviceResult {
-  /// The canonical registration token for the client app that the message was processed and sent to. 
-  /// You should use this value as the registration token for future requests. Otherwise, 
+  /// The canonical registration token for the client app that the message was processed and sent to.
+  /// You should use this value as the registration token for future requests. Otherwise,
   /// future messages might be rejected.
   external String get canonicalRegistrationToken;
 
@@ -1373,7 +1328,7 @@ abstract class MessagingDeviceResult {
 
   /// A unique ID for the successfully processed message.
   external String get messageId;
-  
+
   external factory MessagingDeviceResult({
     String canonicalRegistrationToken,
     FirebaseError error,
@@ -1385,8 +1340,8 @@ abstract class MessagingDeviceResult {
 @JS()
 @anonymous
 abstract class MessagingDevicesResponse {
-  /// The number of results that contain a canonical registration token. A canonical registration token 
-  /// is the registration token corresponding to the last registration requested by the client app. 
+  /// The number of results that contain a canonical registration token. A canonical registration token
+  /// is the registration token corresponding to the last registration requested by the client app.
   /// This is the token that you should use when sending future messages to the device.
   /// You can access the canonical registration tokens within the results property.
   external num get canonicalRegistrationTokenCount;
@@ -1397,15 +1352,15 @@ abstract class MessagingDevicesResponse {
   /// The unique ID number identifying this multicast message.
   external num get multicastId;
 
-  /// An array of [MessagingDeviceResult] objects representing the status of the processed messages. 
-  /// The objects are listed in the same order as in the request. That is, for each registration token 
-  /// in the request, its result has the same index in this array. 
+  /// An array of [MessagingDeviceResult] objects representing the status of the processed messages.
+  /// The objects are listed in the same order as in the request. That is, for each registration token
+  /// in the request, its result has the same index in this array.
   /// If only a single registration token is provided, this array will contain a single object.
   external List<MessagingDeviceResult> get results;
 
   /// The number of messages that were successfully processed and sent.
   external num get successCount;
-  
+
   external factory MessagingDevicesResponse({
     num canonicalRegistrationTokenCount,
     num failureCount,
@@ -1421,13 +1376,13 @@ abstract class MessagingDevicesResponse {
 abstract class MessagingTopicResponse {
   /// The message ID for a successfully received request which FCM will attempt to deliver to all subscribed devices.
   external num get messageId;
-  
+
   external factory MessagingTopicResponse({
     num messageId,
   });
 }
 
-/// Interface representing the server response from the subscribeToTopic() and 
+/// Interface representing the server response from the subscribeToTopic() and
 /// admin.messaging.Messaging#unsubscribeFromTopic unsubscribeFromTopic() methods.
 @JS()
 @anonymous
@@ -1440,7 +1395,7 @@ abstract class MessagingTopicManagementResponse {
 
   /// The number of registration tokens that were successfully subscribed to the topic.
   external num get successCount;
-  
+
   external factory MessagingTopicManagementResponse({
     List<FirebaseArrayIndexError> errors,
     num failureCount,
